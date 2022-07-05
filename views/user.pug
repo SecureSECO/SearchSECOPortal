@@ -1,0 +1,24 @@
+extends layout
+
+block layout-content
+  div.View
+    h1.Banner Checking #{data.url}.
+    div.Message
+      div.Title
+        h3 Checking you project against the SearchSECO database
+        h5 This might take a while. Keep this page open to see the results here.
+        if data.email != ""
+          h5 The report will be send to #{data.email} when finished.
+        p#check-logs 
+  script(src='/socket.io/socket.io.js')
+  script.
+    var socket = io();
+      socket.on("connect", () => {
+          console.log("Checking project");
+          socket.emit("check-project", '#{JSON.stringify(data)}')
+      })
+    
+      socket.on( 'update-logs', function( f_str ) {
+        console.log("Receiving" + f_str)
+        document.getElementById( 'check-logs' ).innerHTML += f_str.replace(/(?:\r\n|\r|\n)/g, '<br>');
+      });

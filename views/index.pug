@@ -1,0 +1,87 @@
+extends layout
+
+block layout-content
+  div.View
+    h1.Banner <a href="https://github.com/SecureSECO/SearchSECOController"> SearchSECO </a>
+    div.Stats
+      div.Stat
+        h3 Number of projects in the database
+        h1 #{data.projects}
+      div.Stat
+        h3 Number of methods in the database
+        h1 #{data.methods}
+      div.Stat
+        h3 Coverage of 28M public projects
+        h1 #{data.coverage}
+      div.Stat
+        h3 Number of authors in the database
+        h1 #{data.authors}
+      div.Stat
+        h3 Number of vulnerabilities in the database
+        h1 #{data.vulnerabilities}
+      div.Stat
+        h3 Number of vulnerabilities added in last day
+        h1 #{data.vulnChange}
+      div.Stat
+        h3 Number of vulnerabilities with patch
+        h1 #{data.vulnerabilities}
+      div.Stat
+        h3 Number of projects added in last day
+        h1 #{data.projectChange}
+    div.Left
+      div.Stat.Table
+        h3 Methods uplaoded in last day
+        table
+          tr
+            th Worker name
+            th Methods
+          for worker in data.methodChange
+            if worker != undefined
+              tr
+                td #{worker.name }
+                td #{worker.value}
+      div.Stat.Table
+        h3 Most recent vulnerabilities uploaded
+        table
+          tr
+            th Vulnerability code
+          for vuln in data.recentVulns
+            tr
+              td #{vuln.schema.fields[1].labels.VulnCode }
+    div.Right
+      div.Stat.Table
+        h3 Most recent projects uploaded
+        table
+          tr
+            th Project url
+          for project in data.recentProjects
+            tr
+              td 
+                a(href=project.schema.fields[1].labels.Project target="_blank") #{project.schema.fields[1].labels.Project }
+    div.check-root
+      div(class="box-root flex-flex flex-direction--column" style="min-height: 45vh;flex-grow: 1;")
+        div(class="box-root padding-top--24 flex-flex flex-direction--column" style="flex-grow: 1; z-index: 9;")
+          div(class="formbg-outer")
+            div(class="formbg")
+              div(class="formbg-inner padding-horizontal--48")
+                h3.padding-bottom--15 Check project against the database
+                form(action='/portal', method='POST')
+                  div.field.padding-bottom--24
+                    label(for="url") Url: 
+                    input(type='text', name='url', value='')
+                  //div.field.padding-bottom--24
+                    label(for="password") Password: 
+                    input(type='password', name='password', value='')
+                  div.field.padding-bottom--24
+                    label.tooltip(for="email") Email &#9432;:
+                      div.tooltipDiv
+                        span.tooltiptext This email wil be used to send the report when finished. <br> By using this system you allow us to store your email adress.
+                    input(type='text', name='email', value='')
+                  div.field.padding-bottom--24
+                    input(type='submit', value='Submit')
+                if errors
+                  ul
+                    for error in errors
+                      li!= error.msg
+  footer
+    p SeachSECO is part of the <a href="https://secureseco.org/">SecureSECO</a> project.

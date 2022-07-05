@@ -1,0 +1,27 @@
+extends layout
+
+block layout-content
+  div.View
+    //h1.Banner Projects in the <a href="https://github.com/SecureSECO/SearchSECOController"> SearchSECO </a> database.
+    h1.Banner Projects in the #[a(href="https://github.com/SecureSECO/SearchSECOController").headerLink SearchSECO ] database.
+    h1#counter.Counter
+  footer
+    p SeachSECO is part of the <a href="https://secureseco.org/">SecureSECO</a> project.
+
+  script.
+    const counter = document.getElementById( 'counter' )
+    function updateCounter(){
+      fetch("/portal/projectCounter")
+      .then( response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error: ${response.status}`);
+        }
+        return response.text();
+      })
+      .then( text => counter.textContent = text )
+      .catch( error => counter.textContent = `Could not fetch project counter: ${error}`);
+    }
+
+    updateCounter();
+
+    setInterval(updateCounter, 30000);
