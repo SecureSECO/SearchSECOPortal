@@ -245,6 +245,9 @@ app.use(bp.urlencoded({ extended: true }))
   app.get("/portal/projects", (req, res) => {
     res.render('projects', {title: "Projects counter"});
   });
+ app.get("/", (req,res)=>{
+   res.redirect(301,"/portal");
+  });
 
   app.get("/portal/projectcounter", (req, res) => {
     axios.post('https://secureseco.science.uu.nl/api/ds/query', {
